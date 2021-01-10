@@ -1,7 +1,7 @@
 import './menu-item.styles.scss'
 import { withRouter } from 'react-router-dom'
 
-const MenuItem = ({title, imageUrl, size}) => (
+const MenuItem = ({title, imageUrl, size, history}) => (
     // The style allows us to dynamically change the CSS
     <div className={`${size} menu-item`}>
         <div 
