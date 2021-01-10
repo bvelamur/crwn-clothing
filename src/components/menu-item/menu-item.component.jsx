@@ -1,4 +1,5 @@
 import './menu-item.styles.scss'
+import { withRouter } from 'react-router-dom'
 
 const MenuItem = ({title, imageUrl, size}) => (
     // The style allows us to dynamically change the CSS
@@ -16,4 +17,4 @@ const MenuItem = ({title, imageUrl, size}) => (
     </div>
 );
 
-export default MenuItem;
+export default withRouter(MenuItem);
