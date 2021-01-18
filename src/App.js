@@ -5,7 +5,7 @@ import ShopPage from './pages/shop/shop.component'
 import Header from './components/header/header.component'
 import SignInAndSignUpPage from './components/sign-in-and-sign-up/sign-in-and-sign-up.component.jsx'
 import { Switch, Route } from 'react-router-dom'
-import { auth } from './firebase/firebase.utils'
+import { auth, createUserProfileDocument } from './firebase/firebase.utils'
 import { Component } from 'react'
 
 class App extends Component {
@@ -21,8 +21,20 @@ class App extends Component {
 
   componentDidMount() {
     // this connection is always open when the application is open
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(user => {
-      this.setState({currentUser: user});
+    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+      if (userAuth) {
+        const userRef = await createUserProfileDocument(userAuth);
+        userRef.onSnapshot(snapshot => {
+          this.setState({
+            currentUser: {
+              id: snapshot.id,
+              ...snapshot.data()
+            }
+          });
+        });
+      }
+      // if user ever logs out, set the auth to null
+      this.setState({currentUser: userAuth});
     })
   }
 
