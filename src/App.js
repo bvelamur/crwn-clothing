@@ -7,6 +7,8 @@ import SignInAndSignUpPage from './components/sign-in-and-sign-up/sign-in-and-si
 import { Switch, Route } from 'react-router-dom'
 import { auth, createUserProfileDocument } from './firebase/firebase.utils'
 import { Component } from 'react'
+import { connect } from 'react-redux'
+import {setCurrentUser} from './redux/user/user.actions'
 
 class App extends Component {
   constructor() {
@@ -21,20 +23,19 @@ class App extends Component {
 
   componentDidMount() {
     // this connection is always open when the application is open
+    const {setCurrentUser} = this.props;
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {
         const userRef = await createUserProfileDocument(userAuth);
         userRef.onSnapshot(snapshot => {
-          this.setState({
-            currentUser: {
+          setCurrentUser({
               id: snapshot.id,
               ...snapshot.data()
-            }
-          });
-        });
+            })
+          })
       }
       // if user ever logs out, set the auth to null
-      this.setState({currentUser: userAuth});
+      setCurrentUser(userAuth);
     })
   }
 
@@ -46,7 +47,7 @@ class App extends Component {
   render(){
      return (
       <div>
-        <Header currentUser={this.state.currentUser}/>
+        <Header/>
         <Switch>
           <Route exact path='/' component={HomePage}/>
           <Route path='/shop' component={ShopPage}/>
@@ -57,4 +58,8 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapDispatchToProps = dispatch => ({
+  setCurrentUser: user => dispatch(setCurrentUser(user))
+});
+
+export default connect(null, mapDispatchToProps)(App);
