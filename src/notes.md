@@ -23,6 +23,30 @@ Is the extra learning curve worth it?
 1. As applications grow, we need to add a new style, a new component to make it better
 2. Really good senior devs are good since they make the judgment call
 
+###Using firestore
+What kind of objects can we get back from firestore?
+1. QueryReference
+2. Snapshot
+3. Security rules
+
+We get the first two objects when we make a query - asking DB to give us something. These objects can be of a **document** type or **collection** type. We will always get an object back even if the query returns empty.
+
+**QueryReference** - place in DB that we are querying. It does not have any data.
+**Snapshot** - Actually has the data
+
+####DocumentReference and CollectionReference
+**DocumentReference** - Can perform CRUD i.e. create, retrieve, update, delete.
+1. .set()
+2. .get()
+3. .update()
+4. .delete()
+
+**CollectionReference** - We can add documents to collection using .add()
+
+**.get()** provides us with a Snapshot object.
+
+####DocumentSnapshot
+We can check if the document exists using .exists property.
 
 
 
